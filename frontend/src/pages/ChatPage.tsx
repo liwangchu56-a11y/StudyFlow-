@@ -18,7 +18,8 @@ import { TodoBubble } from "../components/todos/TodoBubble";
 import { useUiStore } from "../store/uiStore";
 import type { ChatSessionDetail, ChatMessage as ChatMsg, ExtractedConcept } from "../types/api";
 
-
+// StrictMode å¨å¼åæ¨¡å¼ä¸ä¼ unmount + remount, ç¨æ¨¡åçº§åéé²æ­¢éå¤åå»º
+let _initLock = false;
 
 const TITLE_MAX = 60;
 
@@ -28,7 +29,6 @@ export function ChatPage() {
   const [titleDraft, setTitleDraft] = useState("");
   const [candidates, setCandidates] = useState<ExtractedConcept[] | null>(null);
 
-  const createdRef = useRef(false);
   const qc = useQueryClient();
   const create = useCreateChatSession();
   const updateTitle = useUpdateChatSessionTitle();
@@ -43,8 +43,8 @@ export function ChatPage() {
 
   // 首次进入: 没 session 就建一个 (用 ref 防止 StrictMode 重复创建)
   useEffect(() => {
-    if (sessionId == null && !createdRef.current) {
-      createdRef.current = true;
+    if (sessionId == null && !_initLock) {
+      _initLock = true;
       create
         .mutateAsync({})
         .then((s) => setSessionId(s.id))

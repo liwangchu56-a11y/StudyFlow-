@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export interface ChatInputProps {
   onSend: (text: string) => void;
@@ -8,24 +8,10 @@ export interface ChatInputProps {
 
 const MAX_LEN = 8000;
 
-export const ChatInput = React.memo(function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
+export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
   const [text, setText] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    ref.current?.focus();
-  }, []);
-
-  // 自动增高 (确保宽高正确)
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    // 先还原高度, 再测量滚动高度
-    el.style.height = 'auto';
-    el.style.minHeight = '44px';
-    const h = Math.min(el.scrollHeight, 128);
-    el.style.height = Math.max(44, h) + 'px';
-  }, [text]);
 
   const send = () => {
     const t = text.trim();
@@ -71,4 +57,4 @@ export const ChatInput = React.memo(function ChatInput({ onSend, disabled, place
       )}
     </div>
   );
-});
+}
