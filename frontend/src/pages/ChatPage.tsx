@@ -146,12 +146,6 @@ export function ChatPage() {
       );
     } catch {
       removePending();
-      // 也移除临时用户消息
-      qc.setQueryData<ChatSessionDetail>(chatSessionKey(sid), (old) => {
-        if (!old) return old;
-        const msgs = old.messages.filter((m) => m.id > 0);
-        return { ...old, messages: msgs, session: { ...old.session, message_count: msgs.length } };
-      });
       post.mutate({ content: text });
     }
   };

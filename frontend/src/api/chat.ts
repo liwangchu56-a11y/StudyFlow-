@@ -69,12 +69,8 @@ export function usePostMessage(sessionId: number) {
       ),
 
     onError: () => {
-      // 清理所有临时 ID（负值）
-      qc.setQueryData<ChatSessionDetail>(chatSessionKey(sessionId), (old) => {
-        if (!old) return old;
-        const messages = old.messages.filter((m) => m.id > 0);
-        return { ...old, messages, session: { ...old.session, message_count: messages.length } };
-      });
+      // 用户消息已存入 DB, 只是回复失败; 刷新页面即可看到真实数据
+      qc.invalidateQueries({ queryKey: chatSessionKey(sessionId) });
     },
 
     onSuccess: (data) => {

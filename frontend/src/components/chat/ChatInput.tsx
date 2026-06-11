@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export interface ChatInputProps {
   onSend: (text: string) => void;
@@ -8,7 +8,7 @@ export interface ChatInputProps {
 
 const MAX_LEN = 8000;
 
-export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
+export const ChatInput = React.memo(function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
   const [text, setText] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
 
@@ -71,4 +71,4 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
       )}
     </div>
   );
-}
+});
