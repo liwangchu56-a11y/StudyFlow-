@@ -28,6 +28,7 @@ export function ChatPage() {
   const [titleDraft, setTitleDraft] = useState("");
   const [candidates, setCandidates] = useState<ExtractedConcept[] | null>(null);
 
+  const createdRef = useRef(false);
   const qc = useQueryClient();
   const create = useCreateChatSession();
   const updateTitle = useUpdateChatSessionTitle();
@@ -40,9 +41,10 @@ export function ChatPage() {
   const messagesEnd = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  // 首次进入: 没 session 就建一个
+  // 首次进入: 没 session 就建一个 (用 ref 防止 StrictMode 重复创建)
   useEffect(() => {
-    if (sessionId == null) {
+    if (sessionId == null && !createdRef.current) {
+      createdRef.current = true;
       create
         .mutateAsync({})
         .then((s) => setSessionId(s.id))
