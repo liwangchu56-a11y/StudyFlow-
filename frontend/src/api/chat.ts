@@ -68,6 +68,15 @@ export function usePostMessage(sessionId: number) {
         payload,
       ),
 
+    onError: () => {
+      // 清理所有临时 ID（负值）
+      qc.setQueryData<ChatSessionDetail>(chatSessionKey(sessionId), (old) => {
+        if (!old) return old;
+        const messages = old.messages.filter((m) => m.id > 0);
+        return { ...old, messages, session: { ...old.session, message_count: messages.length } };
+      });
+    },
+
     onSuccess: (data) => {
       // 用真实数据替换整个 cache（覆盖旧的乐观数据）
       qc.setQueryData<ChatSessionDetail>(chatSessionKey(sessionId), (old) => {
