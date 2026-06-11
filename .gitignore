@@ -1,0 +1,32 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+.vite/
+*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# 数据 (本地 sqlite 持久化目录, 勿提交)
+data/
+
+# 环境
+.env
+
+# Build artifacts
+*.tsbuildinfo
+vite.err
+vite.log
+*.pyc
+dist/
