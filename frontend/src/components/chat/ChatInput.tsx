@@ -16,12 +16,15 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
     ref.current?.focus();
   }, []);
 
-  // 自动增高
+  // 自动增高 (确保宽高正确)
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    // 先还原高度, 再测量滚动高度
     el.style.height = 'auto';
-    el.style.height = Math.min(el.scrollHeight, 128) + 'px';
+    el.style.minHeight = '44px';
+    const h = Math.min(el.scrollHeight, 128);
+    el.style.height = Math.max(44, h) + 'px';
   }, [text]);
 
   const send = () => {
@@ -51,7 +54,7 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps) {
           onKeyDown={onKey}
           disabled={false}
           placeholder={placeholder ?? "说点什么... (Enter 发送, Shift+Enter 换行)"}
-          className="flex-1 resize-none rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition disabled:opacity-50 max-h-32 min-h-[44px] break-words whitespace-pre-wrap overflow-x-hidden overflow-y-auto"
+          className="flex-1 min-w-0 resize-none rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 transition disabled:opacity-50 max-h-32 min-h-[44px] break-words whitespace-pre-wrap overflow-x-hidden overflow-y-auto"
         />
         <button
           onClick={send}
